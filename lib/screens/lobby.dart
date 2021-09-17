@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:kubiot/services/databasemethods.dart';
+import 'package:kubiot/services/dynamic_link.dart';
+import 'package:share/share.dart';
 
 class Lobby extends StatefulWidget {
   final String gameId;
@@ -14,15 +16,22 @@ class Lobby extends StatefulWidget {
 
 class _LobbyState extends State<Lobby> {
   late Stream<QuerySnapshot> userStream;
+  String? gameLink;
 
   getUserStream() async {
     userStream = await DatabaseMethods().getUsersInGame(widget.gameId);
     setState(() {});
   }
 
+  getGameLink() async {
+    gameLink = await DynamicLinkHelper().createDynamicLink(widget.gameId);
+    setState(() {});
+  }
+
   @override
   void initState() {
     getUserStream();
+    getGameLink();
     super.initState();
   }
 
@@ -44,8 +53,15 @@ class _LobbyState extends State<Lobby> {
                       },
                     )
                   : Text("loading");
-            })
+            }),
         //if owner generate invite key
+        SelectableText(gameLink ?? "game link showd be here"),
+        SizedBox(
+          height: 20,
+        ),
+        ElevatedButton(onPressed: () => getGameLink(), child: Text("refresh link")),
+
+        ElevatedButton(onPressed: () => Share.share(gameLink ?? "no link"), child: Text("copy link")),
         //if owner start button
       ],
     ));

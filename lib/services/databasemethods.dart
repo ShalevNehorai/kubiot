@@ -18,6 +18,26 @@ class DatabaseMethods {
     return gameDoc.id;
   }
 
+  Future<bool> isGameExists(String? gameId) async {
+    if (gameId == null) {
+      return false;
+    }
+
+    DocumentSnapshot gameDoc = await FirebaseFirestore.instance.collection(GAMES_COLLACTION).doc(gameId).get();
+
+    return gameDoc.exists;
+  }
+
+  Future<bool> isGameStarted(String? gameId) async {
+    if (gameId == null) {
+      return false;
+    }
+
+    DocumentSnapshot gameDoc = await FirebaseFirestore.instance.collection(GAMES_COLLACTION).doc(gameId).get();
+
+    return gameDoc["started"];
+  }
+
   Future<String> addGameOwner(String gameId, Map<String, dynamic> ownerInfo) async {
     DocumentReference gameDoc = FirebaseFirestore.instance.collection(GAMES_COLLACTION).doc(gameId);
     DocumentReference ownerDoc = await gameDoc.collection(USERS_COLLACTION).add(ownerInfo);

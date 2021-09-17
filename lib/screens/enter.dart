@@ -3,7 +3,9 @@ import 'package:kubiot/screens/lobby.dart';
 import 'package:kubiot/services/databasemethods.dart';
 
 class Entrie extends StatelessWidget {
-  Entrie();
+  String? gameId;
+
+  Entrie(this.gameId);
 
   final TextEditingController tECname = TextEditingController();
 
@@ -15,6 +17,7 @@ class Entrie extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Text(gameId ?? "No game id"), //TODO delete later
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Text("Kubiot", style: TextStyle(fontSize: 40)),
