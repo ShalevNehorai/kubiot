@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kubiot/screens/lobby.dart';
 import 'package:kubiot/services/databasemethods.dart';
 
 class Entrie extends StatelessWidget {
@@ -41,6 +42,13 @@ class Entrie extends StatelessWidget {
               print("$gameId,  $ownerId");
 
               //move to the lobby and create new game
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Lobby(
+                            gameId: gameId,
+                            userId: ownerId,
+                          )));
             },
             child: Text("create"),
           )

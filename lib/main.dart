@@ -5,6 +5,7 @@ import 'package:kubiot/screens/enter.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  // SystemChrome.setEnabledSystemUIOverlays([]);
   runApp(MyApp());
 }
 

@@ -51,7 +51,7 @@ packages:
     source: hosted
     version: "5.4.1"
   cloud_firestore_web:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: cloud_firestore_web
       url: "https://pub.dartlang.org"
@@ -107,12 +107,19 @@ packages:
     source: hosted
     version: "4.0.1"
   firebase_core_web:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: firebase_core_web
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  firebase_dynamic_links:
+    dependency: "direct main"
+    description:
+      name: firebase_dynamic_links
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.9"
   flutter:
     dependency: "direct main"
     description: flutter

@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseMethods {
-  final String GAMES_COLLACTION = "games";
-  final String USERS_COLLACTION = "users";
+  static const String GAMES_COLLACTION = "games";
+  static const String USERS_COLLACTION = "users";
 
   Map<String, dynamic> createUserMap(String name, String dieColor) {
     return {"name": name, "die amount": 5, "die color": dieColor};
@@ -26,5 +26,16 @@ class DatabaseMethods {
 
     gameDoc.set(updateGameInfo, SetOptions(merge: true));
     return ownerDoc.id;
+  }
+
+  Future<String> addUserToGame(String gameId, Map<String, dynamic> userInfo) async {
+    DocumentReference gameDoc = FirebaseFirestore.instance.collection(GAMES_COLLACTION).doc(gameId);
+    DocumentReference userDoc = await gameDoc.collection(USERS_COLLACTION).add(userInfo);
+
+    return userDoc.id;
+  }
+
+  Future<Stream<QuerySnapshot>> getUsersInGame(String gameId) async {
+    return FirebaseFirestore.instance.collection(GAMES_COLLACTION).doc(gameId).collection(USERS_COLLACTION).snapshots();
   }
 }
