@@ -12,6 +12,7 @@ class DatabaseMethods {
     Map<String, dynamic> gameInfo = {
       "started": false,
       "current tern": "rolling",
+      "created ts": Timestamp.now()
     };
 
     DocumentReference gameDoc = await FirebaseFirestore.instance.collection(GAMES_COLLACTION).add(gameInfo);

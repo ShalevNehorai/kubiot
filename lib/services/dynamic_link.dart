@@ -21,7 +21,22 @@ class DynamicLinkHelper {
   }
 
   Future<String?> getLinkData() async {
-    final PendingDynamicLinkData? data = await FirebaseDynamicLinks.instance.getInitialLink();
+    FirebaseDynamicLinks.instance.onLink(
+      onSuccess: (linkData) async {
+        if (linkData != null) {
+          Uri deepLink = linkData.link;
+          if (deepLink.queryParameters.containsKey('id')) {
+            return deepLink.queryParameters["id"];
+          }
+          return "data not contain id key";
+        }
+      },
+      onError: (error) async {
+        print(error);
+      },
+    );
+
+    /*final PendingDynamicLinkData? data = await FirebaseDynamicLinks.instance.getInitialLink();
     if (data != null) {
       Uri deepLink = data.link;
       if (deepLink.queryParameters.containsKey('id')) {
@@ -30,6 +45,6 @@ class DynamicLinkHelper {
       return "data not contain id key";
     }
 
-    return null;
+    return null;*/
   }
 }

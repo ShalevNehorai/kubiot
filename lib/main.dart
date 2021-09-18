@@ -43,7 +43,11 @@ class _LoadingState extends State<Loading> {
 
   void loadData() async {
     String? roomId = await DynamicLinkHelper().getLinkData().onError(
-        (error, stackTrace) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Page404())));
+        (error, stackTrace) { 
+          print(error.toString()) 
+      });
+
+    print(roomId ?? "null");
 
     if ((roomId == null) ||
         (await DatabaseMethods().isGameExists(roomId)) && !(await DatabaseMethods().isGameStarted(roomId))) {
