@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:kubiot/services/databasemethods.dart';
-import 'package:kubiot/services/dynamic_link.dart';
 import 'package:share/share.dart';
 
 class Lobby extends StatefulWidget {
@@ -24,7 +23,7 @@ class _LobbyState extends State<Lobby> {
   }
 
   getGameLink() async {
-    gameLink = await DynamicLinkHelper().createDynamicLink(widget.gameId);
+    //gameLink = await DynamicLinkHelper().createDynamicLink(widget.gameId);
     setState(() {});
   }
 
@@ -38,33 +37,35 @@ class _LobbyState extends State<Lobby> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      children: [
-        StreamBuilder(
-            stream: userStream,
-            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              return snapshot.hasData
-                  ? ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        DocumentSnapshot ds = snapshot.data!.docs[index];
-                        return NameTile(ds, widget.userId);
-                      },
-                    )
-                  : Text("loading");
-            }),
-        //if owner generate invite key
-        SelectableText(gameLink ?? "game link showd be here"),
-        SizedBox(
-          height: 20,
-        ),
-        ElevatedButton(onPressed: () => getGameLink(), child: Text("refresh link")),
+        body: SafeArea(
+      child: Column(
+        children: [
+          StreamBuilder(
+              stream: userStream,
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                return snapshot.hasData
+                    ? ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          DocumentSnapshot ds = snapshot.data!.docs[index];
+                          return NameTile(ds, widget.userId);
+                        },
+                      )
+                    : Text("loading");
+              }),
+          //if owner generate invite key
+          SelectableText(gameLink ?? "game link showd be here"),
+          SizedBox(
+            height: 20,
+          ),
+          ElevatedButton(onPressed: () => getGameLink(), child: Text("refresh link")),
 
-        ElevatedButton(onPressed: () => Share.share(gameLink ?? "no link"), child: Text("copy link")),
-        //if owner start button
-      ],
-    ));
+          ElevatedButton(onPressed: () => Share.share(gameLink ?? "no link"), child: Text("copy link")),
+          //if owner start button
+        ],
+            ),
+        ));
   }
 }
 

@@ -37,23 +37,29 @@ class Entrie extends StatelessWidget {
           ElevatedButton(
             style: ButtonStyle(),
             onPressed: () async {
-              String gameId = await DatabaseMethods().createNewGame();
+              late String userId;
 
-              String ownerId = await DatabaseMethods()
-                  .addGameOwner(gameId, DatabaseMethods().createUserMap(tECname.text, diesColor));
+              Map<String, dynamic> userMap = DatabaseMethods().createUserMap(tECname.text, diesColor);
 
-              print("$gameId,  $ownerId");
+              if (this.gameId == null) {
+                this.gameId = await DatabaseMethods().createNewGame();
+
+                userId = await DatabaseMethods().addGameOwner(this.gameId!, userMap);
+                print("$gameId,  $userId");
+              } else {
+                userId = await DatabaseMethods().addUserToGame(this.gameId!, userMap);
+              }
 
               //move to the lobby and create new game
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                       builder: (context) => Lobby(
-                            gameId: gameId,
-                            userId: ownerId,
+                            gameId: this.gameId!,
+                            userId: userId,
                           )));
             },
-            child: Text("create"),
+            child: Text(this.gameId == null ? "create" : "join"),
           )
         ],
       ),
