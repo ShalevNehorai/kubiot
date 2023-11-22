@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:kubiot/models/game_model.dart';
 import 'package:kubiot/models/player_model.dart';
+import 'package:provider/provider.dart';
 
 class FirebaseMethods {
   static const String GAMES_COLLACTION = "games";
@@ -22,7 +23,7 @@ class FirebaseMethods {
     return gameDoc.snapshots();
   }
 
-  Future<Stream<DocumentSnapshot<Object?>>> joinGame(PlayerModel player, String gameId) async{
+  Future<(Stream<DocumentSnapshot<Object?>>, int)> joinGame(PlayerModel player, String gameId) async{
     if(gameId.isNotEmpty){
       DocumentSnapshot<Map<String, dynamic>> gameDoc =
           await FirebaseFirestore.instance.collection(GAMES_COLLACTION).doc(gameId).get();
@@ -37,13 +38,14 @@ class FirebaseMethods {
         }
 
         gameData.addPlayer(player);
+        int index = gameData.players.length - 1;
 
         await FirebaseFirestore.instance.collection(GAMES_COLLACTION).doc(gameId).update(gameData.toMap());//posibly error when two players enters at the same time
 
         Stream<DocumentSnapshot<Object?>> docSnapshot =
             FirebaseFirestore.instance.collection(GAMES_COLLACTION).doc(gameId).snapshots();
 
-        return docSnapshot;
+        return (docSnapshot, index);
       }
       else{
         return Future.error("game not exists");

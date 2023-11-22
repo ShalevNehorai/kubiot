@@ -22,6 +22,7 @@ class GameDataProvider extends ChangeNotifier{
 
   void updatePlayerIndex(index) {
     playerIndex = index;
+    notifyListeners();
   }
 
   void updateRoomData(GameModel data) {

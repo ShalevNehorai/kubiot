@@ -28,8 +28,7 @@ class _EnterState extends State<Enter> {
     PlayerModel player = PlayerModel(tECname.text);
     FirebaseMethods().createNewGame(player).then((snapshot) {
       Provider.of<GameDataProvider>(context, listen: false).updateRoomSnapshot(snapshot);
-      int index = Provider.of<GameDataProvider>(context, listen: false).addPlayer(player);
-      Provider.of<GameDataProvider>(context, listen: false).updatePlayerIndex(index);
+      Provider.of<GameDataProvider>(context, listen: false).updatePlayerIndex(0);
 
       context.go(Lobby.ROUTE_NAME);
     }).onError((error, stackTrace) {
@@ -40,9 +39,9 @@ class _EnterState extends State<Enter> {
 
   void joinGame(BuildContext context){
     PlayerModel player = PlayerModel(tECname.text);
-    FirebaseMethods().joinGame(player, widget.gameId!).then((snapshot) {
+    FirebaseMethods().joinGame(player, widget.gameId!).then((record) {
+      var (snapshot, index) = record;
       Provider.of<GameDataProvider>(context, listen: false).updateRoomSnapshot(snapshot);
-      int index = Provider.of<GameDataProvider>(context, listen: false).addPlayer(player);
       Provider.of<GameDataProvider>(context, listen: false).updatePlayerIndex(index);
 
       context.go(Lobby.ROUTE_NAME);
@@ -62,10 +61,24 @@ class _EnterState extends State<Enter> {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/photos/backgroud.jpg"),
-            fit: BoxFit.fitHeight,
-          )
+          
+          gradient: LinearGradient(
+            colors: [
+              const Color(0xFF032400),
+              const Color(0xFF1a4a2a),
+              const Color(0xFF0b5323),
+              const Color(0xFF086927),
+            ],
+            begin: const FractionalOffset(0.0, 0.0),
+            end: const FractionalOffset(0.0, 1.0),
+            stops: const [0.0, 0.2, 0.6, 1.0],
+            tileMode: TileMode.clamp
+          
+        ),
+          // image: DecorationImage(
+          //   image: AssetImage("assets/photos/backgroud.jpg"),
+          //   fit: BoxFit.fitHeight,
+          // )
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -73,7 +86,7 @@ class _EnterState extends State<Enter> {
             Text(widget.gameId ?? "No game id", style: TextStyle(color: Colors.white),), //TODO delete later
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Text("Kubiot", style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 40)),
+              child: Text("Kubiot", style: TextStyle(color: Colors.white, fontSize: 40)),
             ), //TODO will be the logo
       
             Padding(
