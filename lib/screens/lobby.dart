@@ -103,7 +103,7 @@ class _LobbyState extends State<Lobby> {
                                   children: [
                                     Row(
                                       children: [
-                                        CircleAvatar(backgroundColor: Colors.grey, maxRadius: 15),
+                                        CircleAvatar(backgroundColor: player.color, maxRadius: 15),
                                         Gap(10),
                                         Column(
                                           children: [

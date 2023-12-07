@@ -21,6 +21,7 @@ dependencies:
   provider: ^6.0.4
   gap:
   font_awesome_icon_class: ^0.0.6
+  number_inc_dec: ^0.8.0
 
 
   cupertino_icons: ^1.0.2

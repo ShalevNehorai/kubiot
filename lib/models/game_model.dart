@@ -8,6 +8,8 @@ class GameModel{
   late bool started;
   late String winner;
   late Timestamp createdTime;
+  late int currentDiceBet;
+  late int currentAmountBet;
 
   late String _gameId;
 
@@ -16,10 +18,12 @@ class GameModel{
     players.add(player);
 
     ownerIndex = 0;
-    turnIndex = 0;
+    turnIndex = -1;
     started = false;
     winner = '';
     createdTime = Timestamp.now();
+    currentAmountBet = 0;
+    currentDiceBet = 0;
   }
 
   set gameId(String id) => _gameId = id;
@@ -32,7 +36,9 @@ class GameModel{
       'turnIndex': turnIndex,
       'ownerIndex': ownerIndex,
       'started': started,
-      'winner': winner
+      'winner': winner,
+      'currentAmountBet':currentAmountBet,
+      'currentDieBet':currentDiceBet
     };
   }
 
@@ -43,10 +49,35 @@ class GameModel{
     turnIndex = map['turnIndex'],
     ownerIndex = map['ownerIndex'],
     started = map['started'],
-    winner = map['winner'];
+    winner = map['winner'],
+    currentAmountBet = map['currentAmountBet'],
+    currentDiceBet = map['currentDieBet'];
 
 
   void addPlayer(PlayerModel player){
     players.add(player);
   }
+
+  void nextTrun(){
+    do{
+      turnIndex++;
+      turnIndex %= players.length;
+    } while(!players.elementAt(turnIndex).inGame());
+  }
+
+  String getCurrentBetString(){
+    return "die: " + currentDiceBet.toString() + "  amount: " + currentAmountBet.toString();
+  }
+
+  bool newBet(int diceBet, int amountBet){
+    if(diceBet < currentDiceBet || (diceBet == currentDiceBet && amountBet < currentAmountBet)){
+      return false;
+    }
+
+    currentDiceBet = diceBet;
+    currentAmountBet = amountBet;
+    return true;
+  }
+
+
 }
